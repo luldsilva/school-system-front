@@ -18,4 +18,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/students/students.component').then((m) => m.StudentsComponent),
   },
+  {
+    path: 'schools',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/schools/schools.component').then((m) => m.SchoolsComponent),
+  },
 ];

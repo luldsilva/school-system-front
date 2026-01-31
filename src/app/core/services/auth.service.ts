@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -12,31 +13,42 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
+    @Inject(PLATFORM_ID) private platformId: object,
   ) {}
 
-  login(nome: string, senha: string) {
+  login(userName: string, password: string) {
     return this.http
       .post<{ token: string }>(`${this.apiUrl}/login`, {
-        UserName: nome,
-        Password: senha,
+        UserName: userName,
+        Password: password,
       })
       .pipe(
         tap((response) => {
-          localStorage.setItem('token', response.token);
+          if (isPlatformBrowser(this.platformId)) {
+            localStorage.setItem('token', response.token);
+          }
         }),
       );
   }
 
   logout() {
-    localStorage.removeItem('token');
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('token');
+    }
     this.router.navigate(['/login']);
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('token');
+    if (isPlatformBrowser(this.platformId)) {
+      return !!localStorage.getItem('token');
+    }
+    return false;
   }
 
   getToken(): string | null {
-    return localStorage.getItem('token');
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem('token');
+    }
+    return null;
   }
 }

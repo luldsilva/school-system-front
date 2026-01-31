@@ -1,0 +1,66 @@
+<div class="container-fluid p-2 p-md-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Escolas</h2>
+    <button class="btn btn-primary" (click)="newSchool()">+ Nova Escola</button>
+  </div>
+
+  <input
+    type="text"
+    class="form-control mb-3"
+    placeholder="Buscar por descrição"
+    [(ngModel)]="search"
+    (input)="filter()"
+    name="search"
+  />
+  <div class="table-responsive">
+    <table class="table table-hover table-bordered">
+      <thead class="table-dark">
+        <tr>
+          <th>Descrição</th>
+          <th width="150">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let school of filteredSchools">
+          <td>{{ school.description }}</td>
+          <td class="text-center d-flex flex-wrap justify-content-center gap-2">
+            <button class="btn btn-sm btn-warning" (click)="editSchool(school)">Editar</button>
+            <button class="btn btn-sm btn-danger" (click)="deleteSchool(school.id)">Excluir</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="selectedSchool" class="card mt-4">
+    <div class="card-header">
+      {{ isEditing ? 'Edit School' : 'New School' }}
+    </div>
+
+    <div class="card-body" style="overflow: auto">
+      <form>
+        <div class="mb-3">
+          <label>Descrição</label>
+          <input class="form-control" [(ngModel)]="selectedSchool.description" name="description" />
+        </div>
+
+        <div class="text-end">
+          <button class="btn btn-secondary me-2" type="button" (click)="cancel()">Cancelar</button>
+          <button class="btn btn-success" type="button" (click)="saveSchool()">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-2 gap-2">
+    <button class="btn btn-secondary" (click)="prevPage()" [disabled]="currentPage === 1">
+      Anterior
+    </button>
+    <span>Página {{ currentPage }} de {{ Math.ceil(totalItems / pageSize) }}</span>
+    <button
+      class="btn btn-secondary"
+      (click)="nextPage()"
+      [disabled]="currentPage * pageSize >= totalItems"
+    >
+      Próximo
+    </button>
+  </div>
+</div>
