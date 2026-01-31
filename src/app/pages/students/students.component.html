@@ -1,0 +1,25 @@
+<h2>Students</h2>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>CPF</th>
+      <th>Birth Date</th>
+      <th>Mobile</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let student of students">
+      <td>{{ student.name }}</td>
+      <td>{{ student.cpf }}</td>
+      <td>{{ student.birthDate | date: 'dd/MM/yyyy' }}</td>
+      <td>{{ student.mobilePhone }}</td>
+      <td>
+        <button (click)="deleteStudent(student.id)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
